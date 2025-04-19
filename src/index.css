@@ -68,3 +68,11 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+/* index.css */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

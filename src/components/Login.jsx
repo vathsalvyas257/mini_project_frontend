@@ -1,31 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux"; // ✅ Import this
-import { setUser } from "../redux/authSlice"; // ✅ Import setUser
-import { api } from "../utils/api"; // centralized Axios instance
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/authSlice";
+import { api } from "../utils/api";
 import { Eye, EyeOff } from 'lucide-react';
 import GoogleAuthButton from "./GoogleAuthButton";
-import axios from "axios";
+import { Player } from "@lottiefiles/react-lottie-player";
+import cricketAnim from "../assets/animations/cricket.json";
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // ✅ Setup dispatch
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -34,15 +28,9 @@ const Login = () => {
     setError("");
 
     try {
-      // Step 1: Login
       await api.post("/api/auth/login", formData, { withCredentials: true });
 
-      // Step 2: Immediately get the user info via /me
-      const userRes = await api.get("/api/auth/me", {
-        withCredentials: true,
-      });
-
-      // Step 3: Store in Redux
+      const userRes = await api.get("/api/auth/me", { withCredentials: true });
       dispatch(setUser(userRes.data.user));
 
       toast.success("Login successful!");
@@ -57,14 +45,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login to Your Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a1f3d] via-[#0c2d57] to-[#092635] px-4">
+      <div className="bg-white rounded-3xl shadow-xl overflow-hidden flex w-full max-w-4xl">
+        
+        {/* Left: Login Form */}
+        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+          <h2 className="text-3xl font-bold mb-6 text-[#0c2d57]">Login to Your Account</h2>
 
-        {error && <div className="text-red-500 mb-4 text-sm">{error}</div>}
+          {error && <div className="text-red-500 mb-4 text-sm">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
+          <form onSubmit={handleSubmit} className="space-y-5">
             <input
               type="email"
               name="email"
@@ -73,44 +63,59 @@ const Login = () => {
               onChange={handleChange}
               required
               autoComplete="username"
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 text-black focus:outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#00ff88]"
             />
-          </div>
 
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              autoComplete="current-password"
-              required
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md text-black shadow-sm focus:ring focus:ring-blue-200 focus:outline-none pr-10"
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 transform -translate-y-1/2 right-3 text-gray-600 cursor-pointer"
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                autoComplete="current-password"
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-black pr-10 focus:outline-none focus:ring-2 focus:ring-[#00ff88]"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 cursor-pointer"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-[#00ff88] hover:bg-[#00e67a] text-black font-semibold py-3 rounded-md transition"
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+            <div className="flex items-center justify-center text-gray-500 text-sm">or</div>
+            <GoogleAuthButton />
+          </form>
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Don’t have an account?{" "}
+            <span
+              className="text-[#00ff88] hover:underline cursor-pointer"
+              onClick={() => navigate("/signup")}
+            >
+              Sign up
             </span>
-          </div>
+          </p>
+        </div>
 
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-
-          <div className="flex items-center justify-center my-2 text-gray-500 text-sm">or</div>
-          <GoogleAuthButton />
-        </form>
-
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
-          <a href="/signup" className="text-blue-600 hover:underline">Sign up</a>
-        </p>
+        {/* Right: Animation */}
+        <div className="hidden md:flex w-1/2 items-center justify-center bg-[#0c2d57]">
+          <Player
+            autoplay
+            loop
+            src={cricketAnim}
+            style={{ height: "400px", width: "400px" }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -10,6 +10,9 @@ import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "./redux/authSlice";
 import GoogleAuthSuccess from './components/GoogleAuthSuccess';
 import { api } from './utils/api';
+import ProtectedRoute from './components/ProtectedRoute';
+import Profile from "./components/Profile";
+import NewsPage from './components/NewsPage';
 
 
 
@@ -41,6 +44,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<LandingPage />} />
         <Route path="/auth/success" element={<GoogleAuthSuccess/>}/>
+        <Route path="/profile" element={<ProtectedRoute> <Profile/> </ProtectedRoute>}/>
+        <Route path="/news" element={<ProtectedRoute><NewsPage/></ProtectedRoute>} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/logout" element={<Logout/>} />
