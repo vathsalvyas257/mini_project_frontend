@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/authSlice";
+import { setProfileData, setUser } from "../redux/authSlice";
 import { api } from "../utils/api";
 import { Eye, EyeOff } from 'lucide-react';
 import GoogleAuthButton from "./GoogleAuthButton";
@@ -28,7 +28,9 @@ const Login = () => {
     setError("");
 
     try {
-      await api.post("/api/auth/login", formData, { withCredentials: true });
+      const res=await api.post("/api/auth/login", formData, { withCredentials: true });
+      console.log(res.data.user);
+      dispatch(setProfileData(res.data.user));
 
       const userRes = await api.get("/api/auth/me", { withCredentials: true });
       dispatch(setUser(userRes.data.user));

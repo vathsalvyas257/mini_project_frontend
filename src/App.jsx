@@ -11,9 +11,9 @@ import { setUser, clearUser } from "./redux/authSlice";
 import GoogleAuthSuccess from './components/GoogleAuthSuccess';
 import { api } from './utils/api';
 import ProtectedRoute from './components/ProtectedRoute';
-import Profile from "./components/Profile";
 import NewsPage from './components/NewsPage';
-
+import TournamentPage from './components/TournamentPage';
+import ProfilePage from './components/ProfilePage';
 
 
 function App() {
@@ -44,8 +44,9 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<LandingPage />} />
         <Route path="/auth/success" element={<GoogleAuthSuccess/>}/>
-        <Route path="/profile" element={<ProtectedRoute> <Profile/> </ProtectedRoute>}/>
-        <Route path="/news" element={<ProtectedRoute><NewsPage/></ProtectedRoute>} />
+        <Route path="/profile" element={<ProfilePage/>}/>
+        <Route path="/news" element={<NewsPage/>} />
+        <Route path="/tournaments" element={<TournamentPage/>}/>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/logout" element={<Logout/>} />

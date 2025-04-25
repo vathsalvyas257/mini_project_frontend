@@ -36,7 +36,12 @@ const NewsPage = () => {
   const handleNewsDeleted = (id) => {
     setNewsItems((prev) => prev.filter((news) => news._id !== id));
   };
-  
+
+  const handleNewsUpdated = (updatedNews) => {
+    setNewsItems((prev) =>
+      prev.map((news) => (news._id === updatedNews._id ? updatedNews : news))
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a1f3d] via-[#0c2d57] to-[#092635] px-4 py-10 text-white">
@@ -59,15 +64,15 @@ const NewsPage = () => {
           <p className="text-center text-gray-300">No news found</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {newsItems.slice(0, 6).map((news) => (
+            {newsItems.map((news) => (
               <NewsItem
-              key={news._id}
-              news={news}
-              user={user}
-              userRole={user?.role}
-              onNewsDeleted={handleNewsDeleted}
-            />
-            
+                key={news._id}
+                news={news}
+                user={user}
+                userRole={user?.role}
+                onNewsDeleted={handleNewsDeleted}
+                onNewsUpdated={handleNewsUpdated}
+              />
             ))}
           </div>
         )}

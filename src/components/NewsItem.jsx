@@ -1,39 +1,34 @@
-import React, { useState } from 'react';
-import NewsModal from './NewsModal';
+import React, { useState } from "react";
+import NewsModal from "./NewsModal";
 
-const NewsItem = ({ news, onNewsDeleted,user }) => {
+const NewsItem = ({ news, userRole, onNewsDeleted, onNewsUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleDelete = (id) => {
-    onNewsDeleted?.(id); // notify NewsPage to update state
-    setIsModalOpen(false); // close modal
-  };
 
   return (
     <>
       <div
+        className="bg-[#1a365d] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
         onClick={() => setIsModalOpen(true)}
-        className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-xs h-[350px] flex flex-col cursor-pointer"
       >
         {news.image && (
           <img
             src={news.image}
             alt={news.title}
-            className="w-full h-[50%] object-cover"
+            className="w-full h-48 object-cover"
           />
         )}
-
-        <div className="flex flex-col p-3 h-[50%]">
-          <h3 className="text-lg font-semibold text-[#0c2d57] line-clamp-1 flex-shrink-0">
-            {news.title}
-          </h3>
-          <p className="text-gray-600 text-sm mt-1 line-clamp-3 flex-grow overflow-hidden">
-            {news.content}
-          </p>
-          <div className="mt-auto">
-            <p className="text-gray-400 text-xs">
-              createdAt: {new Date(news.createdAt).toLocaleDateString()}
-            </p>
+        <div className="p-4">
+          <h3 className="text-xl font-bold mb-2 line-clamp-2">{news.title}</h3>
+          <p className="text-gray-300 line-clamp-3 mb-4">{news.content}</p>
+          <div className="flex justify-between items-center text-sm text-gray-400">
+            <span>
+              {new Date(news.createdAt).toLocaleDateString()}
+            </span>
+            {(userRole === "admin" || userRole === "organizer") && (
+              <span className="bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                {userRole}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -42,9 +37,9 @@ const NewsItem = ({ news, onNewsDeleted,user }) => {
         <NewsModal
           news={news}
           onClose={() => setIsModalOpen(false)}
-          onEdit={() => {}}
-          onDelete={handleDelete} 
-          userRole={user?.role}
+          onDelete={onNewsDeleted}
+          onEdit={onNewsUpdated}
+          userRole={userRole}
         />
       )}
     </>
