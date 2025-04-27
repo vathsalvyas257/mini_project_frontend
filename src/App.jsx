@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import NewsPage from './components/NewsPage';
 import TournamentPage from './components/TournamentPage';
 import ProfilePage from './components/ProfilePage';
+import CoachDashboard from './components/coach/CoachDashboard';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/logout" element={<Logout/>} />
+        <Route path='/coach' element={<CoachDashboard/>}/>
       </Route>
       </Routes>
     </Router>

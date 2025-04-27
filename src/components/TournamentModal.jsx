@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { api } from "../utils/api";
 import { toast } from "react-toastify";
+import TeamRegister from "./coach/TeamRegister";
 
-const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) => {
+const TournamentModal = ({
+  tournament,
+  onClose,
+  onDelete,
+  onUpdate,
+  userRole,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     title: tournament.title,
     description: tournament.description,
     startDate: new Date(tournament.startDate).toISOString().split("T")[0],
     sportType: tournament.sportType,
-    status: tournament.status
+    status: tournament.status,
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(tournament.image);
@@ -40,7 +47,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
       formDataToSend.append("startDate", formData.startDate);
       formDataToSend.append("sportType", formData.sportType);
       formDataToSend.append("status", formData.status);
-      
+
       if (selectedImage) {
         formDataToSend.append("image", selectedImage);
       }
@@ -60,7 +67,9 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating tournament:", error);
-      toast.error(error.response?.data?.message || "Failed to update tournament");
+      toast.error(
+        error.response?.data?.message || "Failed to update tournament"
+      );
     } finally {
       setIsUpdating(false);
     }
@@ -68,7 +77,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -87,10 +96,12 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
     const statusClasses = {
       Upcoming: "bg-blue-500 text-white",
       Ongoing: "bg-yellow-500 text-black",
-      Completed: "bg-green-500 text-white"
+      Completed: "bg-green-500 text-white",
     };
     return (
-      <span className={`text-xs px-2 py-1 rounded-full ${statusClasses[status]}`}>
+      <span
+        className={`text-xs px-2 py-1 rounded-full ${statusClasses[status]}`}
+      >
         {status}
       </span>
     );
@@ -103,9 +114,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
           {!isEditing ? (
             <>
               <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold">
-                  {tournament.title}
-                </h2>
+                <h2 className="text-2xl font-bold">{tournament.title}</h2>
                 <div className="flex gap-2">
                   {getStatusBadge(tournament.status)}
                   <span className="bg-[#0c2d57] text-white text-xs px-2 py-1 rounded-full">
@@ -113,7 +122,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                   </span>
                 </div>
               </div>
-              
+
               {previewImage && (
                 <img
                   src={previewImage}
@@ -121,18 +130,20 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                   className="w-full h-64 object-cover rounded-lg mb-4 border border-[#0a1f3d]"
                 />
               )}
-              
+
               <p className="text-gray-300 mb-4">{tournament.description}</p>
-              
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-400">Start Date</h4>
-                  <p>
-                    {new Date(tournament.startDate).toLocaleDateString()}
-                  </p>
+                  <h4 className="text-sm font-medium text-gray-400">
+                    Start Date
+                  </h4>
+                  <p>{new Date(tournament.startDate).toLocaleDateString()}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-400">Teams Registered</h4>
+                  <h4 className="text-sm font-medium text-gray-400">
+                    Teams Registered
+                  </h4>
                   <p>{tournament.registeredTeams?.length || 0}</p>
                 </div>
               </div>
@@ -152,7 +163,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                     className="w-full bg-[#0c2d57] border border-[#0a1f3d] text-white p-2 rounded"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Description
@@ -165,7 +176,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                     rows={3}
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -179,7 +190,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                       className="w-full bg-[#0c2d57] border border-[#0a1f3d] text-white p-2 rounded"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-1">
                       Sport Type
@@ -196,7 +207,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                     </select>
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Status
@@ -212,7 +223,7 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                     <option value="Completed">Completed</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Tournament Image
@@ -286,9 +297,11 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                     setFormData({
                       title: tournament.title,
                       description: tournament.description,
-                      startDate: new Date(tournament.startDate).toISOString().split("T")[0],
+                      startDate: new Date(tournament.startDate)
+                        .toISOString()
+                        .split("T")[0],
                       sportType: tournament.sportType,
-                      status: tournament.status
+                      status: tournament.status,
                     });
                   }}
                   className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
@@ -296,6 +309,13 @@ const TournamentModal = ({ tournament, onClose, onDelete, onUpdate, userRole }) 
                   Cancel
                 </button>
               </>
+            )}
+          </div>
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#0a1f3d]">
+            {userRole === "coach" && !isEditing && (
+              <div className="mt-6">
+                <TeamRegister tournamentId={tournament._id} />
+              </div>
             )}
           </div>
         </div>

@@ -4,8 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "../redux/authSlice";
 import Cookies from "js-cookie";
-import axios from "axios";
-
+import {api} from '../utils/api'
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,7 +15,7 @@ const Navbar = () => {
       try {
         // Only attempt to fetch if token exists but user not loaded
         if (Cookies.get("auth_token") && !isAuthenticated) {
-          const res = await axios.get("http://localhost:8080/api/auth/me", {
+          const res = await api.get("/api/auth/me", {
             withCredentials: true,
           });
           dispatch(setUser(res.data.user));
@@ -48,7 +47,14 @@ const Navbar = () => {
       <div className="hidden md:flex gap-10 text-base">
         <Link to="/dashboard" className="hover:text-[#00ff88] transition">Home</Link>
         <Link to="/tournaments" className="hover:text-[#00ff88] transition">Tournaments</Link>
-        <Link to="/live" className="hover:text-[#00ff88] transition">Live Scores</Link>
+        
+        {/* Conditionally render "Live Scores" or "Teams" link based on user role */}
+        {user?.role === "coach" ? (
+          <Link to="/coach" className="hover:text-[#00ff88] transition">Teams</Link>
+        ) : (
+          <Link to="/live" className="hover:text-[#00ff88] transition">Live Scores</Link>
+        )}
+
         <Link to="/news" className="hover:text-[#00ff88] transition">News</Link>
         <Link to="/department" className="hover:text-[#00ff88] transition">Department</Link>
       </div>
