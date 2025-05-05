@@ -20,32 +20,32 @@ const TournamentItem = ({ tournament, userRole, onDelete, onUpdate }) => {
   return (
     <>
       <div 
-        className="bg-[#1a365d] rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+        className="bg-[#1a365d] min-h-[460px] rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
         onClick={() => setIsModalOpen(true)}
       >
         {tournament.image && (
           <img
             src={tournament.image}
             alt={tournament.title}
-            className="w-full h-48 object-cover"
+            className="w-full h-60 object-cover" // increased height
           />
         )}
-        <div className="p-4">
-          <div className="flex justify-between items-start mb-2">
+        <div className="py-6 px-4"> {/* increased vertical padding */}
+          <div className="flex justify-between items-start mb-3">
             <h3 className="text-xl font-bold text-white line-clamp-2">
               {tournament.title}
             </h3>
             {getStatusBadge(tournament.status)}
           </div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="bg-blue-500 text-white text-xs px-2 py-[6px] rounded">
               {tournament.sportType}
             </span>
             <span className="text-xs text-gray-300">
               {tournament.registeredTeams?.length || 0} teams registered
             </span>
           </div>
-          <p className="text-gray-300 text-sm mb-3 line-clamp-2">
+          <p className="text-gray-300 text-sm mb-4 line-clamp-3">
             {tournament.description}
           </p>
           <div className="flex justify-between items-center text-sm">
@@ -53,7 +53,7 @@ const TournamentItem = ({ tournament, userRole, onDelete, onUpdate }) => {
               Starts: {new Date(tournament.startDate).toLocaleDateString()}
             </span>
             {userRole === "admin" || userRole === "organizer" ? (
-              <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded">
+              <span className="bg-blue-500 text-white text-xs px-2 py-[6px] rounded">
                 {userRole}
               </span>
             ) : (

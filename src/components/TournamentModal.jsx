@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { api } from "../utils/api";
 import { toast } from "react-toastify";
 import TeamRegister from "./coach/TeamRegister";
+import Teamapproval from "./Teamapproval";
 
 const TournamentModal = ({
   tournament,
@@ -273,6 +274,7 @@ const TournamentModal = ({
                     </button>
                   </>
                 )}
+
                 <button
                   onClick={onClose}
                   className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
@@ -311,10 +313,18 @@ const TournamentModal = ({
               </>
             )}
           </div>
+
           <div className="flex justify-end gap-3 pt-4 border-t border-[#0a1f3d]">
             {userRole === "coach" && !isEditing && (
               <div className="mt-6">
                 <TeamRegister tournamentId={tournament._id} />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#0a1f3d]">
+            {userRole === "organizer" && !isEditing && (
+              <div className="mt-6">
+                <Teamapproval tournamentId={tournament._id} />
               </div>
             )}
           </div>

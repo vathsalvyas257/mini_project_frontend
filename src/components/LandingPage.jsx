@@ -28,10 +28,10 @@ const LandingPage = () => {
             Explore Tournaments
           </button>
           <button
-            onClick={() => navigate("/registration")}
+            onClick={() => navigate("/news")}
             className="bg-transparent border border-white text-white hover:bg-white hover:text-black font-semibold px-6 py-3 rounded-full transition duration-300"
           >
-            Register Now
+           Explore News
           </button>
         </div>
       </div>
